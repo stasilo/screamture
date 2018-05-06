@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>screamture!</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link href="https://fonts.googleapis.com/css?family=Amatic+SC|Open+Sans:300,700" rel="stylesheet">
+		<link href="styles/normalize.css" rel="stylesheet">
+
+
+		<style>
+			body {
+				margin: 0px;
+				background-color: #dddddd;
+				overflow: hidden;
+			}
+
+			a {
+				color: white;
+				text-decoration: underline;
+			}
+
+			.logo {
+				position: fixed;
+
+				top: 30px;
+				left: 20px;
+
+				color: white;
+				font-family: "Amatic SC";
+
+				font-size: 60px;
+			}
+
+			.logo__small {
+				color: white;
+				font-family: "Amatic SC";
+				font-size: 1.5em;
+			}
+
+			.countdown__wrapper {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+
+				transform: translateX(-50%) translateY(-50%);
+				display: none;
+			}
+
+			.progressbar__notice {
+				font-family: "Amatic SC";
+				font-size: 112px;
+
+				color: white;
+			}
+
+			.countdown__wrapper .countdown__copy {
+				font-family: "Amatic SC";
+				font-size: 112px;
+
+				color: white;
+			}
+
+			.progressbar__wrapper {
+				position: absolute;
+
+				top: 0;
+				left: 0;
+
+				height: 10px;
+				width: 100%;
+			}
+
+			.progressbar__wrapper .progressbar__statusbar {
+				height: 100%;
+				width: 0;
+
+				margin: 0;
+				padding: 0;
+
+				background-color: white;
+			}
+
+			.progressbar__notice {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+
+				transform: translateX(-50%) translateY(-50%);
+
+				font-family: "Amatic SC";
+				font-size: 100px;
+
+				color: white;
+				display: none;
+			}
+
+			.controls__wrapper {
+				position: absolute;
+
+				bottom: 30px;
+				right: 10px;
+
+				display: none;
+			}
+
+			.button {
+				position: relative;
+
+				color: white;
+
+				background-color: rgba(0, 0, 0, 0.2);
+				transition: background-color 300ms ease-out;
+
+				outline: none;
+				border: 1px solid white;
+
+				font-size: 24px;
+				font-family: "Amatic SC";
+
+				padding: 20px 35px 20px 35px;
+				margin-right: 20px;
+
+				cursor: pointer;
+			}
+
+			.button:hover {
+				background-color: rgba(255, 255, 255, 0.3);
+			}
+
+			.modal__wrapper {
+				position: absolute;
+				z-index: 3;
+
+				width: 750px;
+				height: 500px;
+
+				border: 1px solid white;
+				margin: 0;
+				padding: 0;
+
+				top: 50%;
+				left: 50%;
+				transform: translateX(-50%) translateY(-50%);
+
+				color: white;
+
+				background-color: rgba(0, 0, 0, 0.6);
+			}
+			.modal__content button {
+				display: inline-block;
+			}
+
+			.modal__content {
+				padding: 30px 50px 30px 50px;
+
+				font-family: "Open Sans";
+				font-weight: 300;
+				font-size: 16px;
+				line-height: 25px;
+
+				color: white;
+				text-align: center;
+			}
+
+			.modal__content .button {
+				margin-top: 30px;
+			}
+
+			.larger-copy {
+				font-size: 1.5em;
+			}
+
+			strong {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="logo">
+			SCREAMture!
+		</div>
+
+		<div class="modal__wrapper">
+			<div class="modal__content">
+				<p class="larger-copy">
+					This is the <span class="logo__small">Screamture</span>
+				<p>
+				<p>
+					A 3d-printed sculpture generated using sound recorded through your microphone.
+				</p>
+				<p>
+					Start a recording and speak, scream or make other noises, then export your newly generated sculpture as
+					an STL-model ready for 3d-printing in software lika <a href="https://ultimaker.com/en/products/cura-software">Cura</a>.
+					You can move the model around and zoom in and out after recording by using your mouse.</p>
+				</p>
+				<p>
+					<strong>Note</strong><br/>
+					This only works in browsers with WebRTC (Chrome, Edge and Firefox) and WebGL support.
+					<strong>You'll also need to give permissions for micrphone access - look for a popup near the address bar.</strong>
+				</p>
+				<button class="button" data-stasilo-close>Record screamture</button>
+			</div>
+		</div>
+
+		<div class="countdown__wrapper">
+			<span class="countdown__copy"></span>
+		</div>
+
+		<div class="progressbar__wrapper">
+			<div class="progressbar__statusbar">
+				&nbsp;
+			</div>
+		</div>
+
+		<div class="progressbar__notice">
+			Done!
+		</div>
+
+		<div class="controls__wrapper">
+			<button class="button" data-stasilo-record>Record new screamture</button>
+			<button class="button button--download-model" data-stasilo-export>Download screamture model</button>
+		</div>
+
+		<script src="scripts/vendor/jquery-3.1.1.js"></script>
+		<script src="scripts/vendor/three.js"></script>
+		<script src="scripts/vendor/TrackballControls.js"></script>
+		<script src="scripts/vendor/STLBinaryExporter.js"></script>
+		<script src="scripts/vendor/FileSaver.js"></script>
+		<script src="scripts/vendor/Tween.js"></script>
+		<script src="scripts/Components/KeyboardControlHandler.js"></script>
+		<script src="scripts/Components/ProgressbarHandler.js"></script>
+		<script src="scripts/Components/ModalHandler.js"></script>
+		<script src="scripts/Components/ButtonHandler.js"></script>
+		<script src="scripts/Components/CountdownHandler.js"></script>
+		<script src="scripts/Components/SoundAnalyzer.js"></script>
+		<script src="scripts/Components/FrequencyRecorder.js?v=100fasdf"></script>
+		<script src="scripts/Components/Screamture.js"></script>
+		<script src="scripts/Main.js"></script>
+		<script src="scripts/Bootstrap.js"></script>
+	</body>
+</html>
